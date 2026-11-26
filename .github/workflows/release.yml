@@ -1,0 +1,31 @@
+# Creates the GitHub release of a pushed tag vX.Y.Z: zips the tagged tree and takes the release
+# notes from the tag message.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # checkout replaces an annotated tag by a lightweight one, which has no message.
+      - name: Fetch the tag message
+        run: git fetch --force origin "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}"
+      # .gitattributes keeps .github and itself out of the zip.
+      - name: Zip
+        run: git archive --format=zip --output "embeff-ep-software-package-${GITHUB_REF_NAME#v}.zip" "${GITHUB_REF_NAME}"
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git for-each-ref "refs/tags/${GITHUB_REF_NAME}" --format='%(contents:body)' > notes.md
+          prerelease=()
+          if [[ "${GITHUB_REF_NAME}" == *-rc* ]]; then prerelease=(--prerelease); fi
+          gh release create "${GITHUB_REF_NAME}" --title "ExecutionPlatform ${GITHUB_REF_NAME#v}" \
+            --notes-file notes.md "${prerelease[@]}" "embeff-ep-software-package-${GITHUB_REF_NAME#v}.zip"

@@ -1,0 +1,652 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EP configuration",
+  "description": "A configuration determines which Endpoints are available and what DUT pins are used for it.",
+  "type": "object",
+  "properties": {
+    "System": {
+      "description": "Optional. Defines how the ExecutionPlatform is communicating with the DUT at runtime. When omitted, the ep-config is intended for system tests (firmware without the EP runtime package).",
+      "type": "object",
+      "properties": {
+        "UART": {
+          "type": "object",
+          "properties": {
+            "DUT_RX": {
+              "description": "Package number for the RX pin on the DUT.",
+              "type": ["integer", "string"]
+            },
+            "DUT_TX": {
+              "description": "Package number for the TX pin on the DUT.",
+              "type": ["integer", "string"]
+            },
+            "Baudrate": {
+              "description": "Baudrate that EP uses for communication with DUT. Must match the settings in the BSP.",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "DUT_TX",
+            "DUT_RX",
+            "Baudrate"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "UART"
+      ],
+      "additionalProperties": false
+    },
+    "Analyzer": {
+      "description": "Analyzer Endpoint configuration.",
+      "type": "object",
+      "properties": {
+        "Output": {
+          "description": "In the Output section, you may configure a signal for outputs 0 to 7. The signal must reference to an endpoint name you defined in your configuration.",
+          "type": "object",
+          "properties": {
+            "0": {
+              "description": "A signal to expose to the Analyzer output 0.",
+              "type": "string"
+            },
+            "1": {
+              "description": "A signal to expose to the Analyzer output 1.",
+              "type": "string"
+            },
+            "2": {
+              "description": "A signal to expose to the Analyzer output 2.",
+              "type": "string"
+            },
+            "3": {
+              "description": "A signal to expose to the Analyzer output 3.",
+              "type": "string"
+            },
+            "4": {
+              "description": "A signal to expose to the Analyzer output 4.",
+              "type": "string"
+            },
+            "5": {
+              "description": "A signal to expose to the Analyzer output 5.",
+              "type": "string"
+            },
+            "6": {
+              "description": "A signal to expose to the Analyzer output 6.",
+              "type": "string"
+            },
+            "7": {
+              "description": "A signal to expose to the Analyzer output 7.",
+              "type": "string"
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "Output"
+      ],
+      "additionalProperties": false
+    },
+    "CAN": {
+      "description": "CAN Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "CAN Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "RX": {
+              "description": "Package number for the CAN RX pin.",
+              "type": ["integer", "string"]
+            },
+            "TX": {
+              "description": "Package number for the CAN TX pin.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "RX",
+            "TX"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "CAN_FD": {
+      "description": "CAN-FD Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "CAN-FD Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "RX": {
+              "description": "Package number for the CAN-FD RX pin.",
+              "type": ["integer", "string"]
+            },
+            "TX": {
+              "description": "Package number for the CAN-FD TX pin.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "RX",
+            "TX"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "GPIO": {
+      "description": "GPIO Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "GPIO Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "Pin": {
+              "description": "Package number connected to the instance.",
+              "type": ["integer", "string"]
+            },
+            "Pull": {
+              "description": "Enable a pullup or pulldown resistor within the endpoint.",
+              "enum": [
+                "None",
+                "Up",
+                "Down"
+              ]
+            }
+          },
+          "required": [
+            "Pin",
+            "Pull"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ANOUT": {
+      "description": "ANOUT Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "ANOUT Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "Pin": {
+              "description": "Package number connected to this endpoint. Pin must either be connected to an Analog_Out signal in the DUT schematic, or be an input of an ANALOG_MULTIPLEXER_8 instance: <instance>.In0 to <instance>.In7.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "Pin"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ANALOG_MULTIPLEXER_8": {
+      "description": "ANALOG_MULTIPLEXER_8 Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "ANALOG_MULTIPLEXER_8 Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "Sel0": {
+              "description": "Select pin, least significant bit. Must be the Pin of a GPIO endpoint, for example PA0.Pin.",
+              "type": "string"
+            },
+            "Sel1": {
+              "description": "Select pin. Must be the Pin of a GPIO endpoint, for example PA1.Pin.",
+              "type": "string"
+            },
+            "Sel2": {
+              "description": "Select pin, most significant bit. Must be the Pin of a GPIO endpoint, for example PA2.Pin.",
+              "type": "string"
+            },
+            "Out": {
+              "description": "Package number of the multiplexer output. Pin must be connected to Analog_Out signal in DUT schematic.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "Sel0",
+            "Sel1",
+            "Sel2",
+            "Out"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ANIN": {
+      "description": "ANIN Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "ANIN Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "Pin": {
+              "description": "Package number connected to this endpoint. Pin must be connected to Analog_In signal in DUT schematic.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "Pin"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "I2C_TARGET": {
+      "description": "I2C-Target Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "I2C-Target Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "SCL": {
+              "description": "Package number for the SCL pin the DUT.",
+              "type": ["integer", "string"]
+            },
+            "SDA": {
+              "description": "Package number for the SDA pin on the DUT.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "SCL",
+            "SDA"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "IE": {
+      "description": "Incremental Encoder Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "Incremental Encoder Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "OUT_A": {
+              "description": "Package number for DUT pin that receives the A signal.",
+              "type": ["integer", "string"]
+            },
+            "OUT_B": {
+              "description": "Package number for DUT pin that receives the B signal.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "OUT_A",
+            "OUT_B"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "PIN_FOLLOW": {
+      "description": "Pin-Follow Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "Pin-Follow Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "InSignal": {
+              "description": "Package number for the pin that should be followed.",
+              "type": ["integer", "string"]
+            },
+            "OutPin": {
+              "description": "Package number for the output pin.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "InSignal",
+            "OutPin"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "PWM": {
+      "description": "PWM Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "PWM Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "OUT": {
+              "description": "Package pin on the DUT for the high side PWM output.",
+              "type": ["integer", "string"]
+            },
+            "OUTn": {
+              "description": "Optional DUT package pin for the low side PWM output. OUTn acts as a complimentary channel to OUT.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "OUT"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ETH_PHY": {
+      "description": "Eth_PHY Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "Eth_PHY Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "REF_CLK": {
+              "description": "Package number for the DUT_REFCLK pin.",
+              "type": ["integer", "string"]
+            },
+            "DUT_RXD0": {
+              "description": "Package number for the DUT_RXD0 pin.",
+              "type": ["integer", "string"]
+            },
+            "DUT_RXD1": {
+              "description": "Package number for the DUT_RXD1 pin.",
+              "type": ["integer", "string"]
+            },
+            "DUT_TXD0": {
+              "description": "Package number for the DUT_TXD0 pin.",
+              "type": ["integer", "string"]
+            },
+            "DUT_TXD1": {
+              "description": "Package number for the DUT_TXD1 pin.",
+              "type": ["integer", "string"]
+            },
+            "TX_EN": {
+              "description": "Package number for the DUT_TX_EN pin.",
+              "type": ["integer", "string"]
+            },
+            "CRS_DV": {
+              "description": "Package number for the DUT_CRS_DV pin.",
+              "type": ["integer", "string"]
+            },
+            "MDC": {
+              "description": "Package number for the DUT_MDC pin.",
+              "type": ["integer", "string"]
+            },
+            "MDIO": {
+              "description": "Package number for the DUT_MDIO pin.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "REF_CLK",
+            "DUT_RXD0",
+            "DUT_RXD1",
+            "DUT_TXD0",
+            "DUT_TXD1",
+            "TX_EN",
+            "CRS_DV",
+            "MDC",
+            "MDIO"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "SPI": {
+      "description": "SPI-Slave Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "SPI-Slave Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "MOSI": {
+              "description": "Package number for the MOSI pin.",
+              "type": ["integer", "string"]
+            },
+            "MISO": {
+              "description": "Package number for the MISO pin.",
+              "type": ["integer", "string"]
+            },
+            "SCK": {
+              "description": "Package number for the SCK pin. Signal has Pull-Up in Endpoint.",
+              "type": ["integer", "string"]
+            },
+            "nCS0": {
+              "description": "Package number for the active-low CS0 pin. Signal has Pull-Up in Endpoint",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "MOSI",
+            "MISO",
+            "SCK",
+            "nCS0"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "EEPROM_SPI": {
+      "description": "EEPROM_SPI Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "EEPROM_SPI Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "SIZE_Kb": {
+              "description": "The EEPROM size in Kilobit (Kb). One Kilobit (Kb) consists of 1,000 bits. Must be either 128Kb, 256Kb or 512Kb.",
+              "type": ["integer", "string"],
+              "enum": [128, 256, 512]
+            },
+            "SI": {
+              "description": "Package number for the MOSI pin.",
+              "type": ["integer", "string"]
+            },
+            "SO": {
+              "description": "Package number for the MISO pin.",
+              "type": ["integer", "string"]
+            },
+            "SCK": {
+              "description": "Package number for the SCK pin. Signal has Pull-Up in Endpoint.",
+              "type": ["integer", "string"]
+            },
+            "nCS": {
+              "description": "Package number for the active-low CS0 pin. Signal has Pull-Up in Endpoint",
+              "type": ["integer", "string"]
+            },
+            "nWP":{
+              "description": "Package number for the nWP (Hardware Write Protection) pin. Signal has Pull-Up in Endpoint",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "SI",
+            "SO",
+            "SCK",
+            "nCS",
+            "SIZE_Kb"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "MEMORY_MAPPED_I2C": {
+      "description": "MEMORY_MAPPED_I2C Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "MEMORY_MAPPED_I2C Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "SCL": {
+              "description": "Package number for the SCL pin on the DUT.",
+              "type": ["integer", "string"]
+            },
+            "SDA": {
+              "description": "Package number for the SDA pin on the DUT.",
+              "type": ["integer", "string"]
+            },
+            "DEVICE_ADDRESS": {
+              "description": "7-bit I²C address that the endpoint should respond to.",
+              "type": ["integer", "string"]
+            },
+            "REGISTER_WIDTH_BITS": {
+              "description": "The size of each register word. If they are of different size, use the longest.",
+              "type": ["integer", "string"],
+              "enum": [8, 16, 32]
+            },
+            "REGISTER_COUNT": {
+              "description": "Number of registers.",
+              "type": ["integer", "string"]
+            },
+            "REGISTER_AUTO_INCREMENT":{
+              "description": "True: The selected register number is automatically incremented by 1 when REGISTER_WIDTH_BITS data bits are transferred.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "SCL",
+            "SDA",
+            "DEVICE_ADDRESS"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "MEMORY_MAPPED_SPI": {
+      "description": "MEMORY_MAPPED_SPI Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "MEMORY_MAPPED_SPI Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "SI": {
+              "description": "DUT pin that drives the SI pin.",
+              "type": ["integer", "string"]
+            },
+            "SO": {
+              "description": "DUT pin that reads the SO pin.",
+              "type": ["integer", "string"]
+            },
+            "SCK": {
+              "description": "DUT pin that drives the SCK pin. Signal has Pull-Up in Endpoint.",
+              "type": ["integer", "string"]
+            },
+            "nCS": {
+              "description": "DUT pin that drives the active-low CS pin. Signal has Pull-Up in Endpoint.",
+              "type": ["integer", "string"]
+            },
+            "ADDRESS_BITS_COUNT": {
+              "description": "Number of bits that are used for the address. Excludes the RW_BIT.",
+              "type": ["integer", "string"],
+              "enum": [7, 15]
+            },
+            "RW_BIT_POSITION": {
+              "description": "Position of the bit relative to the address that determines if the transfer is read or write.",
+              "type": ["string"],
+              "enum": ["FIRST", "LAST"]
+            },
+            "REGISTER_WIDTH_BITS": {
+              "description": "The size of each register word. If they are of different size, use the longest.",
+              "type": ["integer", "string"],
+              "enum": [8, 16, 32]
+            },
+            "REGISTER_COUNT": {
+              "description": "Number of registers.",
+              "type": ["integer", "string"]
+            },
+            "MODE_CPOL":{
+              "description": "SPI Clock polarity.",
+              "type": ["integer", "string"],
+              "enum": [0,1]
+            },
+            "MODE_CPHA":{
+              "description": "SPI Clock phase.",
+              "type": ["integer", "string"],
+              "enum": [0,1]
+            }
+          },
+          "required": [
+            "SI",
+            "SO",
+            "SCK",
+            "nCS",
+            "ADDRESS_BITS_COUNT",
+            "RW_BIT_POSITION",
+            "REGISTER_WIDTH_BITS",
+            "REGISTER_COUNT"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "UART": {
+      "description": "UART Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "UART Endpoint instance.",
+          "type": "object",
+          "properties": {
+            "DUT_RX": {
+              "description": "Package number for the RX pin on the DUT.",
+              "type": ["integer", "string"]
+            },
+            "DUT_TX": {
+              "description": "Package number for the TX pin on the DUT.",
+              "type": ["integer", "string"]
+            }
+          },
+          "required": [
+            "DUT_TX",
+            "DUT_RX"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FMI": {
+      "description": "FMI Endpoint configuration.",
+      "type": "object",
+      "patternProperties": {
+        "^[_a-zA-Z][_a-zA-Z0-9]*$": {
+          "description": "FMI Endpoint instance.",
+          "type": "null"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

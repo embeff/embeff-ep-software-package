@@ -1,0 +1,7 @@
+ExecutionPlatform software package
+Copyright 2024-2026 embeff GmbH
+
+This product includes software developed at embeff GmbH (https://embeff.com).
+
+third_party/googletest is licensed under the BSD 3-Clause License, see third_party/googletest/LICENSE.
+third_party/Unity is licensed under the MIT License, see third_party/Unity/LICENSE.txt.

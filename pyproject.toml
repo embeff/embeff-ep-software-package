@@ -1,0 +1,23 @@
+# pytest and type checker configuration for the ExecutionPlatform test suites.
+# List every ep-config that is imported by your tests or models twice: once in pythonpath
+# for pytest and once more in extraPaths for code completion.
+# Note that the pytest plugin comes with the embeff-ep package (pip install -r requirements.txt).
+
+[tool.pytest]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+# Run verbose by default.
+addopts = ["--verbose", "-s"]
+
+# Read by pytest so that import statements can be linked to configuration files, e.g.: `import gpio.test` -> gpio.ep-config.zip.
+pythonpath = [
+    "app",  # for cmake_helper
+    "build/gpio.ep-config.zip",
+]
+
+# Read by type checkers (Pylance (VS Code) and pyright). While this section exists, Pylance ignores python.analysis.extraPaths.
+[tool.pyright]
+extraPaths = [
+    "app",  # for cmake_helper
+    "build/gpio.ep-config.zip",
+]

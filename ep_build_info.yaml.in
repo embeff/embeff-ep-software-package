@@ -1,0 +1,3 @@
+ep_bsp_apps_tested: "${EP_BSP_APPS_TESTED}"
+ep_bsp_meta_info: "${EP_BSP_META_INFO}"
+ep_bsp_dir: "${BSP_DIR}"

@@ -1,0 +1,6 @@
+# The ExecutionPlatform Python package embeff-ep: Robot Framework library EPLibrary,
+# pytest plugin and ep-config command line tool, in the version of this software package.
+#   pip install -r requirements.txt
+embeff-ep[robot,pytest] @ git+https://github.com/embeff/embeff-ep@v9.8.0
+# The robotcode command line, which runs Robot Framework suites with the settings of robot.toml.
+robotcode[runner]

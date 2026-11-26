@@ -1,0 +1,14 @@
+[variables]
+# These variables are provided inside RobotFramework.
+ep_url = "user:password@10.0.0.120"
+ep_app_dir.expr = "Path.cwd() / 'app'"
+ep_binary_dir.expr = "Path.cwd() / 'build'"
+
+# Default value, overwritten by profiles below
+ep_debugging = "Off"
+
+[profiles.with_dut_debugging.extend-variables]
+ep_debugging = "VSCode"
+
+[profiles.with_external_debugging.extend-variables]
+ep_debugging = "External"

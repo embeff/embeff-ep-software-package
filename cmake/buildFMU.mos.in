@@ -1,0 +1,26 @@
+// omc exits with status 0 even when a call in a script fails, so every
+// step checks its result and exits with an error itself.
+
+if not loadModel(Modelica, {"4.1.0"}) then
+  print(getErrorString());
+  exit(1);
+end if;
+
+// The EP compiles the FMU on the device from its C sources, which omc
+// leaves out by default.
+if not setCommandLineOptions("--simCodeTarget=C --fmiSources=true") then
+  print(getErrorString());
+  exit(1);
+end if;
+
+fmu := buildModelFMU(
+  ${FMU_MODEL_NAME},
+  version="2.0",
+  fmuType="cs",
+  platforms={"static"}
+);
+if fmu == "" then
+  print(getErrorString());
+  exit(1);
+end if;
+getErrorString();

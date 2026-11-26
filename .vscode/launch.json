@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": "automatically_generated",
+            "name": "Debug on ExecutionPlatform",
+            "request": "launch",
+            "type": "cortex-debug",
+            "device": "TODO: Fill jlink device here",
+            "runToEntryPoint": "ep_app_main",
+            "showDevDebugOutput": "none",
+            "servertype": "jlink",
+            "ipAddress": "automatically_generated",
+            "svdFile": "TODO: Fill full path to SVD file here"
+        }
+    ]
+}

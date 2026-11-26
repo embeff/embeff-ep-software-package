@@ -1,0 +1,21 @@
+{
+  "version": 4,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default_c",
+      "toolchainFile": "bsp/default-c/toolchain.cmake",
+      "displayName": "EP default-C BSP",
+      "binaryDir": "build",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BSP_DIR": "bsp/default-c"
+      }
+    }
+    ]
+}

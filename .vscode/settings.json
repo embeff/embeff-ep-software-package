@@ -1,0 +1,17 @@
+{
+    "robotcode.analysis.cache.ignoredLibraries":["EPLibrary"], // Prevent caching issues when using different ep-config files.
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "example",
+    ],
+    "cmake.useCMakePresets": "auto",
+    "cmake.configureOnOpen": true,
+    "cmake.skipConfigureIfCachePresent": true,
+    "remote.autoForwardPorts": false,
+    "remoteControl.port": 3711,
+    "cmake.options.statusBarVisibility": "hidden",
+    "editor.minimap.enabled": false,
+    "yaml.schemas": {
+        ".vscode/ep-config.schema.json": "*.ep-config.yaml"
+    }
+}
